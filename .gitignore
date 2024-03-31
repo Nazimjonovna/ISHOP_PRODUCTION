@@ -1,0 +1,16 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+
+# Static files (usually collected by "manage.py collectstatic")
+/staticfiles/
+
+# Media files
+/media/
+
+# Virtual environment
+venv/
