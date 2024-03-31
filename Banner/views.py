@@ -1,10 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
+from drf_yasg.utils import swagger_auto_schema
 from .models import *
 from .serializer import *
 
 # Create your views here.
 class BannerView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request):
         banners = Banner.objects.all()
         if banners:
@@ -13,6 +17,7 @@ class BannerView(APIView):
         else:
             return Response("Not found anything")
         
+    @swagger_auto_schema(request_body=BannerSerializer)
     def post(self, request):
         serializer = BannerSerializer(data = request.data)
         if serializer.is_valid():
@@ -23,6 +28,8 @@ class BannerView(APIView):
 
         
 class EditBannerView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request, id):
         banner = Banner.objects.filter(id = id).first()
         if banner:
@@ -31,6 +38,7 @@ class EditBannerView(APIView):
         else:
             return Response("Not found anything")
         
+    @swagger_auto_schema(request_body=BannerSerializer)
     def patch(self, request, id):
         banner = Banner.objects.filter(id = id).first()
         if banner:

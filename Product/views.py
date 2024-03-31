@@ -1,11 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
+from drf_yasg.utils import swagger_auto_schema
 from .serializer import *
 from .models import *
 
 # Create your views here.
 #! PARAMETR
 class ParametrView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request):
         parametrs = Parametr.objects.all()
         if parametrs:
@@ -14,6 +18,7 @@ class ParametrView(APIView):
         else:
             return Response("Not found anything")
         
+    @swagger_auto_schema(request_body=ParametrSerializer)
     def post(self, request):
         serializer = ParametrSerializer(data = request.data)
         if serializer.is_valid():
@@ -23,6 +28,8 @@ class ParametrView(APIView):
             return Response(serializer.errors)
         
 class EditParametrView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request, id):
         parametr = Parametr.objects.filter(id = id).first()
         if parametr:
@@ -31,6 +38,7 @@ class EditParametrView(APIView):
         else:
             return Response("Not found anything")
         
+    @swagger_auto_schema(request_body=ParametrSerializer)
     def patch(self, request, id):
         parametr = Parametr.objects.filter(id = id).first()
         if parametr:
@@ -60,6 +68,8 @@ class EditParametrView(APIView):
 #!CATEGORY
 # // ! CATEGORY
 class CategoryView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request):
         categories = Category.objects.all()
         if categories:
@@ -68,6 +78,7 @@ class CategoryView(APIView):
         else:
             return Response("Not found anything")
         
+    @swagger_auto_schema(request_body=CategorySerializer)
     def post(self, request):
         serializer = CategorySerializer(data = request.data)
         if serializer.is_valid():
@@ -78,6 +89,8 @@ class CategoryView(APIView):
         
         
 class EditCategoryView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request, id):
         parametr = Category.objects.filter(id = id).first()
         if parametr:
@@ -86,6 +99,7 @@ class EditCategoryView(APIView):
         else:
             return Response("Not found anything")
         
+    @swagger_auto_schema(request_body=CategorySerializer)
     def patch(self, request, id):
         parametr = Category.objects.filter(id = id).first()
         if parametr:
@@ -110,6 +124,9 @@ class EditCategoryView(APIView):
 
     # tekshir#####
 class FilterCategory(APIView):
+    parser_classes = [MultiPartParser, ]
+
+    @swagger_auto_schema(request_body=CategorySerializer)
     def post(self, request):
         name = request.data.get('name')
         categories = Category.objects.all()
@@ -135,6 +152,8 @@ class FilterCategory(APIView):
 
 #! NEWS
 class NewsView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request):
         news = News.objects.all()
         if news:
@@ -143,6 +162,7 @@ class NewsView(APIView):
         else:
             return Response('Not found anything')
         
+    @swagger_auto_schema(request_body=NewsSerializer)
     def post(self, request):
         serializer = NewsSerializer(data = request.data)
         if serializer.is_valid():
@@ -152,6 +172,8 @@ class NewsView(APIView):
             return Response(serializer.errors)
         
 class EditNewsView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request, id):
         new = News.objects.filter(id = id).first()
         if new:
@@ -160,6 +182,7 @@ class EditNewsView(APIView):
         else:
             return Response("Not found anything")
         
+    @swagger_auto_schema(request_body=NewsSerializer)
     def patch(self, request, id):
         new = News.objects.filter(id = id).first()
         if new:
@@ -188,6 +211,8 @@ class EditNewsView(APIView):
 
 #! BRAND
 class BrandView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request):
         brand = Brand.objects.all()
         if brand:
@@ -196,6 +221,7 @@ class BrandView(APIView):
         else:
             return Response('Not found anything')
         
+    @swagger_auto_schema(request_body=BrandSerializer)
     def post(self, request):
         serializer = BrandSerializer(data = request.data)
         if serializer.is_valid():
@@ -205,6 +231,8 @@ class BrandView(APIView):
             return Response(serializer.errors)
         
 class EditBrandView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request, id):
         brand = Brand.objects.filter(id = id).first()
         if brand:
@@ -213,6 +241,7 @@ class EditBrandView(APIView):
         else:
             return Response("Not found anything")
         
+    @swagger_auto_schema(request_body=BrandSerializer)
     def patch(self, request, id):
         brand = Brand.objects.filter(id = id).first()
         if brand:
@@ -241,6 +270,8 @@ class EditBrandView(APIView):
 
 #! CONTACT
 class ContactView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request):
         contact = Contact.objects.all()
         if contact:
@@ -249,6 +280,7 @@ class ContactView(APIView):
         else:
             return Response("Not found anything")
         
+    @swagger_auto_schema(request_body=CategorySerializer)
     def post(self, request):
         serializer = CategorySerializer(data = request.data)
         if serializer.is_valid():
@@ -258,6 +290,8 @@ class ContactView(APIView):
             return Response(serializer.errors)
         
 class EditContactView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request, id):
         contact = Contact.objects.filter(id = id).first()
         if contact:
@@ -265,7 +299,8 @@ class EditContactView(APIView):
             return Response(serializer.data)
         else:
             return Response("Not found anything")
-        
+
+    @swagger_auto_schema(request_body=CategorySerializer)   
     def patch(self, request, id):
         contact = Contact.objects.filter(id = id).first()
         if contact:
@@ -294,6 +329,8 @@ class EditContactView(APIView):
 
 #! PublicOffer
 class PublicOfferView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request):
         offer = PublicOffer.objects.all()
         if offer:
@@ -301,7 +338,8 @@ class PublicOfferView(APIView):
             return Response(serializer.data)
         else:
             return Response("Not found anything")
-        
+
+    @swagger_auto_schema(request_body=PublicOfferSerializer) 
     def post(self, request):
         serializer = PublicOfferSerializer(data = request.data)
         if serializer.is_valid():
@@ -311,6 +349,8 @@ class PublicOfferView(APIView):
             return Response(serializer.errors)
         
 class EditPublicOfferView(APIView):
+    parser_classes = [MultiPartParser, ]
+
     def get(self, request, id):
         offer = PublicOffer.objects.filter(id = id).first()
         if offer:
@@ -318,7 +358,8 @@ class EditPublicOfferView(APIView):
             return Response(serializer.data)
         else:
             return Response("Not found anything")
-        
+
+    @swagger_auto_schema(request_body=PublicOfferSerializer)    
     def patch(self, request, id):
         offer = PublicOffer.objects.filter(id = id).first()
         if offer:
@@ -349,6 +390,9 @@ class EditPublicOfferView(APIView):
 
 #! MEDIA
 class MediaView(APIView):
+    parser_classes = [MultiPartParser, ]
+
+    @swagger_auto_schema(request_body=MediaSerializer) 
     def post(self, request):
         serializer = MediaSerializer(data = request.data)
         if serializer.is_valid():
@@ -359,6 +403,9 @@ class MediaView(APIView):
         
 
 class EditMediaView(APIView):
+    parser_classes = [MultiPartParser, ]
+
+    @swagger_auto_schema(request_body=MediaSerializer) 
     def patch(self, request, id):
         offer = Media.objects.filter(id = id).first()
         if offer:
@@ -382,6 +429,9 @@ class EditMediaView(APIView):
     
 #! PRODUCT
 class ProductView(APIView):
+    parser_classes = [MultiPartParser, ]
+
+    @swagger_auto_schema(request_body=ProodcutSerializer) 
     def post(self, request):
         serializer = ProodcutSerializer(data = request.data)
         if serializer.is_valid():
@@ -399,6 +449,8 @@ class ProductView(APIView):
                     pass
 
 class EditProductView(APIView):
+    parser_classes = [MultiPartParser, ]
+    
     def get(self, request, id):
         product = Product.objects.filter(id = id).first()
         rasm = []
@@ -413,6 +465,7 @@ class EditProductView(APIView):
         else:
             return Response("Not found such kind of product")
         
+    @swagger_auto_schema(request_body=ProodcutSerializer)
     def patch(self, request, id):
         product = Product.objects.filter(id = id).first()
         if product:
