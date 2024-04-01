@@ -47,20 +47,30 @@ INSTALLED_APPS = [
     'User',
     'Product',
     'Banner',
-    'Admin',
+    # 'Admin',
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT for admin
-        'rest_framework.authentication.TokenAuthentication',  # Token for user
-        'rest_framework.authentication.SessionAuthentication',  # Optional for debugging
-    ),
+        'DEFAULT_PERMISSION_CLASSES': [
+             'rest_framework.permissions.AllowAny',
+        ],
+        "DATE_INPUT_FORMATS": ["%Y-%m-%d",],
+        'DAFEULT_PERMISSION_CLASSES':('rest_framework.permissions.IsAuthenticated',),
+#  'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+#         # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
+#     ),
+        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        'PAGE_SIZE': 12
 }
 
-
+CORS_ORIGIN_ALLOW_ALL=True
+CORS_ALLOW_CREDENTIALS=True
 
 REST_USE_JWT = True
+
+AUTH_USER_MODEL = 'User.User'
+
 
 SWAGGER_SETTINGS = {
    'USE_SESSION_AUTH': False,
@@ -77,11 +87,11 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=15), 
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=30),
     'ROTATE_REFRESH_TOKENS': True,
-    # 'AUTH_HEADER_TYPES': ('Bearer',),
-    # 'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-    # 'USER_ID_FIELD': 'id',
-    # 'USER_ID_CLAIM': 'id',
-    # 'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'phone',
+    'USER_ID_CLAIM': 'id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 }
 
 MIDDLEWARE = [
