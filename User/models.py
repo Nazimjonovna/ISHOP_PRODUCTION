@@ -1,25 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from User.managers import CustomUserManager
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 
 # Create your models here.
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     phone_regex = RegexValidator(regex='d{0,9}', message="Telefon raqamini +998XXXXXXXXX kabi kiriting!")
     phone = models.CharField(validators=[phone_regex], max_length=9, unique=True)
     otp = models.CharField(max_length=4, null=True)
-    name = models.CharField(max_length = 200)
-    password = models.CharField(max_length=1000,validators=[MinLengthValidator(6)])
-    is_user = models.BooleanField(default = True)
-    is_superadmin = models.BooleanField(default = False)
-    is_admin = models.BooleanField(default = False)
-    is_partner = models.BooleanField(default = False)
+    name = models.CharField(max_length=200)
+    password = models.CharField(max_length=1000, validators=[MinLengthValidator(6)])
+    is_user = models.BooleanField(default=True)
+    is_superadmin = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+    is_partner = models.BooleanField(default=False)
 
     is_staff = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,6 +26,7 @@ class User(AbstractBaseUser):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'phone'
+    EMAIL_FIELD = None
 
     class Meta:
         verbose_name = 'User'
@@ -34,6 +34,12 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.phone
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return self.is_superuser
 
 
 class Client(models.Model):
@@ -68,7 +74,9 @@ class Client(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return self.user.name
+        if self.user and self.user.name:
+            return f"{self.user.name}'s Client"
+        return "Client"
 
 
 class ValidatedOtp(models.Model):

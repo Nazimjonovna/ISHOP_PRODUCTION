@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework.authtoken',
-    'rest_framework_simplejwt.token_blacklist',
+    # 'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'rest_framework',
     'drf_yasg',
     'Ishop',
@@ -56,10 +56,6 @@ REST_FRAMEWORK = {
         ],
         "DATE_INPUT_FORMATS": ["%Y-%m-%d",],
         'DAFEULT_PERMISSION_CLASSES':('rest_framework.permissions.IsAuthenticated',),
-#  'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-#         # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
-#     ),
         'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
         'PAGE_SIZE': 12
 }
@@ -89,7 +85,7 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-    'USER_ID_FIELD': 'phone',
+    'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'id',
     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 }
