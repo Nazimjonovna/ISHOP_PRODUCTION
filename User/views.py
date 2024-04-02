@@ -7,39 +7,56 @@ from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
 from .serializer import *
 from .models import *
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.response import Response
 
 # Create your views here.
+from .models import User  # Import the User model
+
 class Register(APIView):
     permission_classes = [AllowAny]
 
-    @method_decorator(csrf_exempt)
+    # @method_decorator(csrf_exempt)
     @swagger_auto_schema(request_body=AdminSerializer)
     def post(self, request):
-        serializer = AdminSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()  
+            print("bu request data", request.data)
+            serializer = AdminSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save() 
+            user = User.objects.filter(phone_number = request.data.get('phone_number')).first()
             print(user)
-            if user:
-                access = AccessToken.for_user(user)  
-                return Response({
-                    'data': serializer.data,
-                    'token': str(access)
-                })
-            else:
-                return Response("User could not be created", status=500)  
-        else:
-            return Response(serializer.errors, status=400)
+            token = AccessToken.for_user(user)
+            return Response({
+                'data':serializer.data,
+                'access':str(token)
+            })
+            # return Response("User created successfully")
+            # if serializer.is_valid():
+            #     print("bu serializer data", serializer.data)
+            #     user = serializer.save()  
+            #     print(user)
+            #     if user:
+            #         access = AccessToken.for_user(user)  
+            #         return Response({
+            #             'data': serializer.data,
+            #             'token': str(access)
+            #         })
+            #     else:
+            #         return Response("User could not be created", status=500)  
+            # else:
+            #     return Response(serializer.errors, status=400)
          
+
 class LoginView(APIView):
     permission_classes = [AllowAny, ]
 
-    @swagger_auto_schema(request_body=AdminSerializer)
+    @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request):
         print("bu request data",request.data)
-        phone = request.data.get('phone')
+        phone_number = request.data.get('phone_number')
         password = request.data.get('password')
-        print(phone, password)
-        user = User.objects.filter(phone = phone, password = password).first()
+        print(phone_number, password)
+        user = User.objects.filter(phone_number = phone_number, password = password).first()
         if user:
             print(user)
             token = AccessToken.for_user(user) 
@@ -50,8 +67,18 @@ class LoginView(APIView):
             return Response("Not found such kind of user")
         
 
-class SS(APIView):
-    permission_classes = [IsAuthenticated, ]
+# class SS(APIView):
+#     permission_classes = [IsAuthenticated, ]
+
+#     def get(self, request):
+#         return Response("dddd")
+    
+
+class UserListView(APIView):
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        return Response("dddd")
+        print(request.user)
+        users = User.objects.all()
+        serializer = AdminSerializer(users, many=True)
+        return Response(serializer.data)
