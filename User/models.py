@@ -6,6 +6,7 @@ from django.db import models
 
 class User(AbstractBaseUser, PermissionsMixin):
     phone_number = PhoneNumberField(db_index=True, unique=True)
+    otp = models.CharField(max_length=9, blank=True, null=True)
     is_staff = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -31,6 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, null = True, blank = True)
     last_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     card = models.IntegerField(null = True)
     card_info = models.CharField(max_length=4, null = True)
     password = models.CharField(max_length=200)
@@ -66,15 +68,13 @@ class Client(models.Model):
 
 
 class ValidatedOtp(models.Model):
-    pass
-#     phone_regex = RegexValidator(regex='d{0,9}', message="Telefon raqamini +9989XXXXXXXX kabi kiriting!")
-#     phone = models.CharField(validators=[phone_regex],max_length=9,unique=True)
-#     otp = models.CharField(max_length=9, blank=True, null=True)
-#     count = models.IntegerField(default=0, help_text='Kodni kiritishlar soni:')
-#     validated = models.BooleanField(default=False, help_text="Shaxsiy kabinetingizni yaratishingiz mumkin!")
+    phone_number = PhoneNumberField(db_index=True)
+    otp = models.CharField(max_length=9, blank=True, null=True)
+    count = models.IntegerField(default=0, help_text='Kodni kiritishlar soni:')
+    validated = models.BooleanField(default=False, help_text="Shaxsiy kabinetingizni yaratishingiz mumkin!")
 
-#     def __str__(self):
-#         return str(self.phone)
+    def __str__(self):
+        return str(self.phone_number)
 
 class Verification(models.Model):
     STATUS = (
@@ -96,3 +96,11 @@ class Verification(models.Model):
 
 
     
+
+#! ADMIN MODEL ISHI
+class Protsent(models.Model):
+    protsent = models.IntegerField()
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
