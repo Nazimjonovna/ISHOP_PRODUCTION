@@ -48,7 +48,6 @@ CUSTOM_APPS = [
     'User',
     'Product',
     'Banner',
-    # 'Admin',
 ]
 
 
@@ -66,12 +65,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-
-
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # 'PAGE_SIZE': 1,
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 1
 }
 
 CORS_ORIGIN_ALLOW_ALL=True
@@ -93,16 +86,6 @@ SWAGGER_SETTINGS = {
     }
 }
 
-# SIMPLE_JWT = {
-#     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=15), 
-#     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=30),
-#     'ROTATE_REFRESH_TOKENS': True,
-#     'AUTH_HEADER_TYPES': ('Bearer',),
-#     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-#     'USER_ID_FIELD': 'id',
-#     'USER_ID_CLAIM': 'id',
-#     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
-# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -188,16 +171,3 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 PHONENUMBER_DEFAULT_REGION = 'UZ'
-
-
-# SWAGGER_SETTINGS = {
-#     # 'DEFAULT_AUTO_SCHEMA_CLASS': "config.utils.CustomAutoSchema",
-#     "USE_SESSION_AUTH": False,
-#     'SECURITY_DEFINITIONS': {
-#         'Bearer': {
-#             'in': 'header',
-#             'name': 'Authorization',
-#             'type': 'apiKey',
-#         },
-#     }
-# }
